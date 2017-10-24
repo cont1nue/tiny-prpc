@@ -1,2 +1,2 @@
 # tiny-prpc
-an tiny python rpc framework.
+a tiny python rpc framework.
