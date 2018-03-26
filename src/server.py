@@ -20,7 +20,7 @@ class PrpcServer:
         self._socket.setblocking(0)
         self._buffer_size = 1024
         self._epoll = select.epoll()
-        self._epoll.register(self._socket.fileno(), select.EPOLLIN)
+        self._epoll.register(self._socket.fileno(), select.EPOLLIN|select.EPOLLET)
         self._fd_to_socket = {self._socket.fileno():self._socket}
         self._requests = {}
         self._service = Service()
@@ -43,7 +43,7 @@ class PrpcServer:
                     conn, add = self._socket.accept()
                     logging.info("accpet a new connection %s:%d from the client", add[0], add[1])
                     conn.setblocking(0)
-                    self._epoll.register(conn.fileno(), select.EPOLLIN)
+                    self._epoll.register(conn.fileno(), select.EPOLLIN|select.EPOLLET)
                     self._fd_to_socket[conn.fileno()] = conn
                 elif event & select.EPOLLIN:
                     data = recvall(socket, self._buffer_size)
